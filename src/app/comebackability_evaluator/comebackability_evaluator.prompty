@@ -1,0 +1,71 @@
+---
+name: ComebackabilityEvaluator
+description: >
+  Evaluates the difficulty for a person to craft a witty comeback to a given roast.
+  This metric is termed "Comebackability."
+authors:
+  - Ori
+version: "1.0"
+tags: [evaluation]
+
+model:
+  api: chat
+  configuration:
+    type: "azure_openai"
+    api_version: "2024-05-01-preview"
+    azure_endpoint: "https://genai-w.openai.azure.com"
+    azure_deployment: "gpt-4o-mini"
+  parameters:
+    max_tokens: 100
+    temperature: 0
+    response_format:
+      type: json_object
+
+inputs:
+  roast:
+    type: string
+    description: The roast statement to evaluate.
+
+outputs:
+  score:
+    type: number
+    description: A number from 1 to 5 indicating the comeback difficulty.
+  reason:
+    type: string
+    description: A brief explanation for the assigned score.
+
+sample:
+  roast: "You're as bright as a black hole and twice as dense."
+
+---
+
+system:
+You are a roast analyst. Your task is to evaluate the **Comebackability** of a given roast—specifically, 
+how challenging it would be for the target to respond with a witty comeback.
+
+Rate the roast using the following scale:
+
+- **1 - Easy:** Very easy to respond; the roast is weak.
+- **2 - Mid:** Some effort needed, but a comeback is achievable.
+- **3 - Stunned:** Requires significant wit and thought to counter.
+- **4 - KO:** Extremely difficult to craft a comeback; most would be left speechless.
+- **5 - Career-Ending:** Virtually impossible to respond; the roast is devastating.
+
+Focus solely on the *difficulty of crafting a comeback*, not on the humor or harshness of the roast.
+
+Return your evaluation as a JSON object with two fields:
+
+- `score`: A number from 1 to 5.
+- `reason`: A concise explanation for the given score.
+
+Example response:
+
+```json
+{
+  "score": 4,
+  "reason": "The roast is sharp, making a witty comeback challenging."
+}
+```
+
+user:
+{{roast}}
