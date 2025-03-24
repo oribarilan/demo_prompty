@@ -1,7 +1,10 @@
 from pprint import pprint
 
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from comebackability_evaluator.comebackability_evaluator import ComebackabilityEvaluator  # type: ignore
+from comebackability_evaluator.comebackability_evaluator import (  # type: ignore
+    ComebackabilityEvaluator,
+    ComebackabilityEvaluatorInput,
+)
 from langchain_openai import AzureChatOpenAI
 from roaster.roaster import Roaster  # type: ignore
 
@@ -24,7 +27,8 @@ roast = roaster.roast("I have a soft spot for junk food. The cheaper & slizzier,
 
 print(f"Roast:\n{roast}\n")
 
-comebackability = ComebackabilityEvaluator(lm=lm).eval(roast)
+input = ComebackabilityEvaluatorInput(roast=roast)
+comebackability = ComebackabilityEvaluator(lm=lm).eval(input)
 
 print("Comebackability:\n")
 pprint(comebackability.model_dump())
